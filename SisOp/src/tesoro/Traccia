@@ -1,0 +1,26 @@
+Dei cercatori d’oro sono impegnati in una caccia al tesoro. La zona della caccia al tesoro è
+rappresentata da una matrice di dimensione NxM dove ogni elemento rappresenta una casella che
+può essere libera o occupata. Un unico elemento della matrice, rappresentato dalla coppia (X,Y),
+sconosciuta ai cercatori, indica la posizione del tesoro. Lo scopo del gioco è trovare la casella che
+contiene il tesoro. A tal fine ogni cercatore visita una casella della matrice alla volta fino a quando il
+tesoro non viene trovato, da lui o da un altro cercatore. Quando un cercatore trova il tesoro il gioco
+termina e tutti i giocatori terminano la propria esecuzione. Il cercatore che ha trovato il tesoro dovrà
+stampare in output la stringa “Ho vinto!”. Ogni cercatore visita ciascuna delle caselle della matrice
+una sola volta: dopo aver visitato una casella che non contiene il tesoro, ne sceglie a caso un'altra da
+visitare tra quelle non visitate da lui. Quando un cercatore prova ad accedere ad una casella, se la
+trova occupata attende in una coda FIFO, se la trova libera (o al termine dell’attesa nel caso l’avesse
+trovata occupata) la occupa ed inizia a cercare il tesoro per un tempo casuale compreso tra i 2 e i 5
+secondi.
+Si modelli il sistema descritto in Java, dove i cercatori sono dei thread che interagiscono tramite un
+oggetto mappa del tesoro: tale oggetto espone due metodi, iniziaRicerca(int x, int y) e
+terminaRicerca(int x, int y), che permettono ai cercatori d’oro rispettivamente di iniziare e terminare
+la ricerca del tesoro nella posizione specificata. Entrambi i metodi restituiscono un booleano:
+iniziaRicerca restituisce true se il cercatore può iniziare la ricerca nella posizione specificata, false
+se il gioco è terminato; terminaRicerca restituisce true se il tesoro si trova nella posizione
+specificata, false altrimenti. Si implementino due soluzioni che riproducano il funzionamento del
+problema sopra descritto utilizzando:
+• la classe Semaphore del package java.util.concurrent
+• gli strumenti di mutua esclusione e sincronizzazione del package java.util.concurrent.locks.
+Si scriva infine un main d'esempio che, facendo uso di una delle due soluzioni precedenti, inizializzi
+una mappa del tesoro con N=50 e M=70, X=7 e Y=32, inizializzi 20 cercatori e ne avvii
+l’esecuzione.
