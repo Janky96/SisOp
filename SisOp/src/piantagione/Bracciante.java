@@ -28,8 +28,7 @@ public class Bracciante implements Runnable
 				}
 				lavora(operazione);
 				piantagione.termina();
-				riposa();
-				
+				riposa();				
 			}
 		} catch(InterruptedException ie)
 		{
