@@ -5,45 +5,55 @@ import java.util.concurrent.Semaphore;
 public class BarSem extends Bar
 {
 	private Semaphore mutex = new Semaphore(1);
-	private Semaphore [] fila = new Semaphore [MAX_PERSONE.length];
-	private int [] numPersoneInFila = new int[MAX_PERSONE.length];
+	private Semaphore [] fila;
+	private int [] numPersoneInFila = {0,0};
 	
 	public BarSem()
 	{
 		super();
-		for(int i = 0; i < 4; i++)
+		fila = new Semaphore[posto.length];
+		for(int i = 0; i < posto[1]; i++)
 		{
 			fila[i] = new Semaphore(0, true);
-			numPersoneInFila[i] = 0;
 		}
-	}//costruttore
-	
-	public abstract int scegliEInizia() throws InterruptedException
-	{
-		int i = 0;
-		mutex.acquire();
-		if(numPostiLibieri[i] == 0)
-		{
-			if(numPostiLiberi[1 - i] > 0)
-			{
-				i = 1 - i;
-			}
-			else
-			{
-				if(numPersoneInFila[1] < numPersoneInFila[0])
-				{
-					i = 1;
-				}
-				attendiFila(i);
-			}
-		}
-		numPostiLiberi[i]--;
-		mutex.release();
-	}//scegliEInizia
-	
-	private void attendiInFila(int i) throws InterruptedException
-	{
-		numPersoneInFila[i]++;
 	}
 	
+	public int scegliEInizia() throws InterruptedException
+	{
+		mutex.acquire();
+		int i = 0;
+		if(numPostiLiberi[i] == 0)
+		{
+			if(numPostiLiberi[i + 1] > 0)
+			{
+				i = 1 - i;
+			} else
+			{
+				if (numPersoneInFila[i] > numPersoneInFila[i + 1])
+				{
+					i++;
+				}
+			}
+		}
+		mutex.release();
+
+		return i;
+	}
+	
+	public void inizia(int i) throws InterruptedException
+	{
+		mutex.acquire();
+		fila[i].acquire();
+		numPersoneInFila[i]--;
+		
+		mutex.release();
+	}
+	
+	public void finisci(int i) throws InterruptedException
+	{
+		mutex.acquire();
+
+		fila[i].release();
+		mutex.release();
+	}
 }

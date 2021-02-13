@@ -4,12 +4,12 @@ import java.util.Random;
 
 public class Aereo implements Runnable
 {
-	private Aeroporto aeroporto;
-	
+	private final int MIN_TEMPO_VOLO = 600;
+	private final int MAX_TEMPO_VOLO = 900;
+	private final int TEMPO_DECOLLO = 300;
+	private final int TEMPO_ATTERRAGGIO = 300;
 	private Random random = new Random();
-	
-	private final static int MIN_TEMPO_VOLO = 600;
-	private final static int MAX_TEMPO_VOLO = 900;
+	private Aeroporto aeroporto;
 	
 	public Aereo(Aeroporto aeroporto)
 	{
@@ -18,36 +18,31 @@ public class Aereo implements Runnable
 	
 	public void run()
 	{
-		/*try
+		try
 		{
-			while (true)
-			{
-				vola();
-				aeroporto.richiestaPista(aeroporto.ATTERRAGGIO);
-				atterra();
-				aeroporto.rilasciaPista()
-				aeroporto.richiestaNavetta();
-				aeroporto.richiestaPista(aeroporto.DECOLLO)
-				preparazione();
-				aeroporto.rilasciaPista();
-			}
+			//sta volando
+			attendi(MIN_TEMPO_VOLO, MAX_TEMPO_VOLO);
+			
+			aeroporto.richiediPista();			
+			Thread.sleep(TEMPO_ATTERRAGGIO);
+			aeroporto.rilasciaPista();
+			
+			//Passeggeri scendono e salgono
+			aeroporto.richiediNavetta();			
+			
+			aeroporto.richiediPista();
+			//decollo
+			Thread.sleep(TEMPO_DECOLLO);
+			aeroporto.rilasciaPista();
 		} catch(InterruptedException ie)
-		{
-		}*/
+		{	
+		}
 	}
 	
-	public void vola() throws InterruptedException
+	private void attendi(int min, int max) throws InterruptedException
 	{
-		Thread.sleep(random.nextInt(MAX_TEMPO_VOLO - MIN_TEMPO_VOLO + 1) + MIN_TEMPO_VOLO);
+		Thread.sleep(random.nextInt(max - min + 1) + min);
 	}
 	
-	public void atterra() throws InterruptedException
-	{
-		Thread.sleep(300);
-	}
 	
-	public void preparazione() throws InterruptedException
-	{
-		Thread.sleep(300);
-	}
 }

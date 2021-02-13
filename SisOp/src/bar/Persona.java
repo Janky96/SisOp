@@ -6,55 +6,45 @@ import java.util.concurrent.TimeUnit;
 public class Persona implements Runnable
 {
 	private Bar bar;
+	private int MIN_TEMPO_BERE = 20;
+	private int MAX_TEMPO_BERE = 40;
+	private int MIN_TEMPO_PAG = 5;
+	private int MAX_TEMPO_PAG = 10;
 	private Random random = new Random();
-	private final static int MIN_TEMPO_PAGAMENTO = 5;
-	private final static int MAX_TEMPO_PAGAMENTO = 10;
-	private final static int MIN_TEMPO_BERE = 20;
-	private final static int MAX_TEMPO_BERE = 40;
-	
 	
 	public Persona(Bar bar)
 	{
 		this.bar = bar;
-	}//costruttore
+	}
 	
 	public void run()
 	{
 		try
 		{
-			int operazione = bar.scegliEInizia();
-			switch(operazione)
+			while(true)
 			{
-				case 0:
-					attendi(operazione);
-					break;
-				case 1:
-					attendi(operazione);
-					break;
+				int operazione = bar.scegliEInizia();
+				attendi(operazione);
+				operazione = 1 - operazione;
+				bar.inizia(operazione);
+				attendi(operazione);
+				bar.finisci(operazione);
 			}
-			switch(operazione)
-			{
-				case 0:
-					operazione = 1;
-					break;
-				case 1:
-					operazione = 0;
-					break;
-			}
-			bar.inizia(operazione);
-			bar.finisci(operazione);
-			
 		} catch(InterruptedException ie)
 		{
 		}
-	}//run
+	}
 	
 	private void attendi(int operazione) throws InterruptedException
 	{
 		if(operazione == 0)
-			attendi(MIN_TEMPO_PAGAMENTO, MAX_TEMPO_PAGAMENTO);
+		{
+			attendi(MIN_TEMPO_PAG, MAX_TEMPO_PAG);
+		}
 		else
+		{
 			attendi(MIN_TEMPO_BERE, MAX_TEMPO_BERE);
+		}
 	}
 	
 	private void attendi(int min, int max) throws InterruptedException

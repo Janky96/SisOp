@@ -4,11 +4,9 @@ import java.util.concurrent.TimeUnit;
 
 public class Bracciante implements Runnable
 {
+	private final int [] lavoro = {20, 15, 5};
+	private final static int TEMPO_RISPOSO = 10;
 	private Piantagione piantagione;
-	
-	private final static int TEMPO_RIPOSO = 10;
-	private final static int []  lavoro = {20,15,5};
-	
 	
 	public Bracciante(Piantagione piantagione)
 	{
@@ -22,13 +20,13 @@ public class Bracciante implements Runnable
 			while(true)
 			{
 				int operazione = piantagione.inizia();
-				if(operazione == Piantagione.OPERAZIONI_TERMINATE)
+				if(operazione == piantagione.OPERAZIONI_TERMINATE)
 				{
 					break;
 				}
-				lavora(operazione);
+				attendi(lavoro[operazione]);
 				piantagione.termina();
-				riposa();				
+				attendi(TEMPO_RISPOSO);
 			}
 		} catch(InterruptedException ie)
 		{
@@ -36,13 +34,8 @@ public class Bracciante implements Runnable
 		}
 	}
 	
-	public void lavora(int tempo) throws InterruptedException
+	private void attendi(int tempo) throws InterruptedException
 	{
-		TimeUnit.SECONDS.sleep(lavoro[tempo]);
-	}
-	
-	public void riposa() throws InterruptedException
-	{
-		TimeUnit.SECONDS.sleep(TEMPO_RIPOSO);
+		TimeUnit.SECONDS.sleep(tempo);
 	}
 }
